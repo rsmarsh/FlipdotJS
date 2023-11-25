@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "flipdot-display": "github:rsmarsh/node-flipdot#master"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.8",
+    "typescript": "^5.3.2"
   }
 }
