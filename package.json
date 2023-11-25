@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "ts-node index.ts",
+    "dev-debug": "set DEBUG=* & ts-node index.ts",
     "start": "node dist/index.js",
     "build": "tsc"
   },

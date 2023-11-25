@@ -12,40 +12,24 @@ const ADDRESS = 1;
 const ROWS = 16;
 const COLUMNS = 96;
 
-console.log(process.env);
-
 const flippy = new FlipDot(PORT, ADDRESS, ROWS, COLUMNS);
-
-flippy.once('open', function () {
-  console.log('flipdot open');
-  flippy.writeText('Hello World!');
-  flippy.send();
-  flippy.close();
-});
 
 flippy.once('error', function (err: any) {
   console.log(err);
-  console.log('an error');
+  console.log('an error occured');
 });
 
 flippy.once('close', function () {
-  console.log('closed');
+  console.log('connection closed');
 });
 
 console.log(process.title);
 
 flippy.once('open', function () {
-  console.log(
-    flippy.writeText(' Hello World!', {
-      font: 'Banner',
-      width: COLUMNS,
-      printDirection: 0
-    })
-  );
-
+  const dataSent = flippy.writeText('Hello World', {
+    font: 'Banner',
+    width: COLUMNS,
+    printDirection: 0
+  });
   flippy.send();
-});
-
-flippy.once('error', function (err) {
-  console.log('error');
 });
