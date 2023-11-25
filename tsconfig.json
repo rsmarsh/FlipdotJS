@@ -1,16 +1,19 @@
 {
-    "name": "flipdotjs",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-      "flipdot-display": "github:rsmarsh/node-flipdot#master"
-    }
+  "name": "flipdotjs",
+  "description": "NodeJS Backend for controlling a Flipdot Display",
+  "main": "index.js",
+
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "flipdot-display": "github:rsmarsh/node-flipdot#master"
+  },
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "outDir": "./dist"
   }
-  
+}
