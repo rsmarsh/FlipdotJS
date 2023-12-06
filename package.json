@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "ts-node index.ts",
     "dev-debug": "set DEBUG=* & ts-node index.ts",
