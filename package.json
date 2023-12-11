@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "ts-node index.ts",
     "dev-debug": "set DEBUG=* & ts-node index.ts",
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.18.2",
     "flipdot-display": "github:rsmarsh/node-flipdot#master"
   },
   "devDependencies": {
