@@ -3,6 +3,9 @@ const app = express();
 const serverPort = 3000;
 const path = require("path");
 const fs = require("fs");
+require("dotenv").config();
+
+const { insertMessage, queryMessageHistory } = require("./db.js");
 
 const https = require("https");
 
@@ -21,11 +24,12 @@ app.get("/", (req, res) => {
   };
 
   res.sendFile(`${options.root}/src/index.html`);
+  console.log("A visitor appeared");
 });
 
 const options = {
-  key: fs.readFileSync(KEY_LOCATION, "utf8"),
-  cert: fs.readFileSync(CERT_LOCATION, "utf8"),
+  key: fs.readFileSync(process.env.KEY_LOCATION, "utf8"),
+  cert: fs.readFileSync(process.env.CERT_LOCATION, "utf8"),
 };
 
 // Create HTTPs server.
@@ -43,11 +47,16 @@ app.post("/text/", (req, res) => {
 
   flipdot.send();
   res.send(`Sent "${req.params.message}" using "${font}" font`);
+
+  // triggers a DB write with this message
+  insertMessage(message, font);
 });
 
-// app.listen(serverPort, () => {
-//   console.log(`Example app listening on port ${serverPort}`)
-// })
+// returns the message list history when requested
+app.get("/history", async (req, res) => {
+  const messageHistory = await queryMessageHistory();
+  res.json(messageHistory);
+});
 
 server.listen(serverPort, () => {
   console.log("https server listening");
