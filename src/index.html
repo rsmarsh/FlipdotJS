@@ -12,15 +12,56 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        margin: 0;
       }
+
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .history {
+        max-height: 50vh;
+      }
+      
+      .history table {
+        display: block;
+        overflow: scroll;
+        max-height: 100%;
+      }
+
+      td {
+        padding: 1rem;
+      }
+      
     </style>
   </head>
   <body>
     <div class="center">
-      <div>
+      <div class="updater">
+        <h1>FlipdotJS</h1>
         <select id="font-list"></select>
         <input type="text" id="flipdot-input" />
         <button id="submit">Send</button>
+      </div>
+
+      <div class="history" style="margin-top: 3rem;">
+        <h2>History</h2>
+        <table>
+          <thead>
+            <tr>
+              <td>Message</td>
+              <td>When</td>
+              <td>Font</td>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td>Loading...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -346,6 +387,53 @@
           fontOption.selected = true;
         }
       });
+
+      fetch('/history/').then(async (res) => {
+        const messageHistory = await res.json()
+        const messageTable = document.querySelector('#history-tbody');
+        messageTable.innerHTML = '';
+
+        const messagesToShow = 8;
+
+        for (let i = 0; i < messageHistory.length; i++) {
+          const message = messageHistory[i];
+          
+          // stop iterating after hitting the limit
+          if (i > messagesToShow) {
+            return;
+          }
+
+          const newRow = document.createElement('tr');
+          const text = document.createElement('td');
+          const time = document.createElement('td');
+          const font = document.createElement('td');
+          
+          const date = new Date(message.sent_on);
+          const dateText = date.toLocaleDateString('en-gb', { weekday:"long", year:"numeric", month:"short", day:"numeric"})
+          let hours = date.getHours();
+          let minutes = date.getMinutes()
+
+          if (String(hours).length === 1) {
+            hours = `0${hours}`
+          }
+
+          if (String(minutes).length === 1) {
+            minutes = `0${minutes}`
+          }
+          
+          time.textContent = `${dateText}, ${hours}:${minutes}`   
+          text.textContent = message.message_text;
+          font.textContent = message.font_name;
+          
+          newRow.append(text)
+          newRow.append(time)
+          newRow.append(font)
+          
+          messageTable.append(newRow);
+
+        }
+          
+      })
     </script>
   </body>
 </html>

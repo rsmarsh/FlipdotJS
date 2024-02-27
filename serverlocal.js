@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 const serverPort = 3000;
 const path = require("path");
 const fs = require("fs");
@@ -10,7 +11,7 @@ const { insertMessage, queryMessageHistory } = require('./db.js');
 const https = require("https");
 
 const PORT = "/dev/ttyUSB0";
-// const PORT = 'COM3';
+// const PORT = 'COM3'; // Windows USB port
 const ADDRESS = 1;
 const ROWS = 16;
 const COLUMNS = 96;
@@ -18,25 +19,38 @@ const COLUMNS = 96;
 const FlipDot = require("flipdot-display");
 const flipdot = new FlipDot(PORT, ADDRESS, ROWS, COLUMNS);
 
+let visitorCount = 0;
+
 app.get("/", (req, res) => {
   const options = {
     root: path.join(__dirname),
   };
 
+
   res.sendFile(`${options.root}/src/index.html`);
-  console.log("A visitor appeared")
+  console.log(`Visitor ${visitorCount} appeared`)
+  visitorCount += 1;
 });
 
-const options = {
-  key: fs.readFileSync(process.env.KEY_LOCATION, "utf8"),
-  cert: fs.readFileSync(process.env.CERT_LOCATION, "utf8"),
-};
-
-// Create HTTPs server.
-
-var server = https.createServer(options, app);
-
 app.use(express.json());
+
+var allowedOrigins = [
+  'http://localhost:3000',
+  'https://flipdot.isitnice.co.uk',
+  'https://flipdot.richardmarshall.dev'
+];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(allowedOrigins.indexOf(origin) === -1){
+      console.log(origin)
+      var msg = 'Not in CORS allow list';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
+
 app.post("/text/", (req, res) => {
   const { message, font } = req.body;
   flipdot.writeText(message, {
@@ -46,7 +60,7 @@ app.post("/text/", (req, res) => {
   });
 
   flipdot.send();
-  res.send(`Sent "${req.params.message}" using "${font}" font`);
+  res.send(`Displaying "${message}" using "${font}" font`);
 
   // triggers a DB write with this message
   insertMessage(message, font);
@@ -58,9 +72,10 @@ app.get('/history', async (req, res) => {
   res.json(messageHistory);
 })
 
-server.listen(serverPort, () => {
+app.listen(serverPort, () => {
   console.log("https server listening");
 });
+
 
 flipdot.once("error", function (err) {
   console.log(err);
