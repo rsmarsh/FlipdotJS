@@ -3,9 +3,9 @@ const app = express();
 const serverPort = 3000;
 const path = require("path");
 const fs = require("fs");
-require('dotenv').config();
+require("dotenv").config();
 
-const { insertMessage, queryMessageHistory } = require('./db.js');
+const { insertMessage, queryMessageHistory } = require("./db.js");
 
 const https = require("https");
 
@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   };
 
   res.sendFile(`${options.root}/src/index.html`);
-  console.log("A visitor appeared")
+  console.log("A visitor appeared");
 });
 
 const options = {
@@ -53,10 +53,10 @@ app.post("/text/", (req, res) => {
 });
 
 // returns the message list history when requested
-app.get('/history', async (req, res) => {
+app.get("/history", async (req, res) => {
   const messageHistory = await queryMessageHistory();
   res.json(messageHistory);
-})
+});
 
 server.listen(serverPort, () => {
   console.log("https server listening");
