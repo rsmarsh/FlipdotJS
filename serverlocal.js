@@ -37,7 +37,9 @@ app.use(express.json());
 var allowedOrigins = [
   'http://localhost:3000',
   'https://flipdot.isitnice.co.uk',
-  'https://flipdot.richardmarshall.dev'
+  'https://isitnice.co.uk',
+  'https://flipdot.richardmarshall.dev',
+  'https://richardmarshall.dev'
 ];
 
 app.use(cors({
