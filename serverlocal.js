@@ -42,7 +42,7 @@ var allowedOrigins = [
 
 app.use(cors({
   origin: function(origin, callback){
-    if(allowedOrigins.indexOf(origin) === -1){
+    if(allowedOrigins.indexOf(origin) === -1 && origin !== undefined){
       console.log(origin)
       var msg = 'Not in CORS allow list';
       return callback(new Error(msg), false);
