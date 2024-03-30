@@ -59,7 +59,8 @@ app.post("/text/", (req, res) => {
     
   // return an error if the incorrect password is sent
   if (password !== apiPassword) {
-    res.error(401)
+    res.status(401).json({ err: 'Incorrect Password' });
+    return
   }
   
   flipdot.writeText(message, {
