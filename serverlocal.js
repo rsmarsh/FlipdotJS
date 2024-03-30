@@ -54,7 +54,14 @@ app.use(cors({
 }));
 
 app.post("/text/", (req, res) => {
-  const { message, font } = req.body;
+  const { message, password, font } = req.body;
+  const apiPassword = process.env.TEXT_API_PASSWORD;
+    
+  // return an error if the incorrect password is sent
+  if (password !== apiPassword) {
+    res.error(401)
+  }
+  
   flipdot.writeText(message, {
     font: font,
     width: COLUMNS,
