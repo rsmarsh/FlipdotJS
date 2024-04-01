@@ -95,6 +95,9 @@ app.post('/matrix/', (req, res) => {
   // converts the matrix to bytes then writes it
   flipdot.writeMatrix(matrix);
   flipdot.send();
+
+  
+  res.send(`Displaying custom matrix`);
 });
 
 // returns the message list history when requested
