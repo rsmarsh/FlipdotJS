@@ -79,6 +79,8 @@ app.post('/text/', (req, res) => {
 app.post('/matrix/', (req, res) => {
   const { matrix, password } = req.body;
 
+  const apiPassword = process.env.TEXT_API_PASSWORD;
+
   // return an error if the incorrect password is sent
   if (password !== apiPassword) {
     res.status(401).json({ err: 'Incorrect Password' });
